@@ -102,22 +102,18 @@ class Customer {
 
   static async search(searchTerm) {
 
-
-
     const result = await db.query(
       `SELECT id,
         first_name AS "firstName",
         last_name  AS "lastName",
         phone,
         notes
-          FROM customers
-          WHERE first_name || '_' || last_name ILIKE $1
-          ORDER BY last_name`,
-      [`%${searchTerm}%`]
+      FROM customers
+      WHERE CONCAT(first_name, ' ', last_name) ILIKE '%' || $1 || '%'
+      ORDER BY last_name`,
+      [searchTerm]
     );
 
-    // WHERE  first_name
-    // WHERE first_name ILIKE $1 or last_name ILIKE $1 or first_name+last_name ILIKE $1
     return result.rows.map(cust => new Customer(cust));
   }
 
@@ -129,13 +125,13 @@ class Customer {
       first_name AS "firstName",
       last_name AS "lastName",
       c.phone,
-      COUNT(*) as rCount
-        FROM customers AS c
-          JOIN reservations AS r
-            ON c.id = r.customer_id
-        GROUP BY c.id
-        ORDER BY rCount DESC
-        LIMIT 10
+    COUNT(*) as rCount
+      FROM customers AS c
+        LEFT OUTER JOIN reservations AS r
+          ON c.id = r.customer_id
+      GROUP BY c.id
+      ORDER BY rCount DESC
+      LIMIT 10
     `);
 
     return result.rows.map(cust => new Customer(cust));

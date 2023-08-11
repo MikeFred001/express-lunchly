@@ -26,11 +26,6 @@ router.get("/", async function (req, res, next) {
 
   const customers = await Customer.all();
 
-  if (customers === undefined) {
-
-    throw new NotFoundError();
-  }
-
   return res.render("customer_list.html", { customers });
 });
 
@@ -68,11 +63,6 @@ router.post("/add/", async function (req, res, next) {
 router.get("/:id/", async function (req, res, next) {
   const customer = await Customer.get(req.params.id);
 
-  if (customer === undefined) {
-
-    throw new NotFoundError();
-  }
-
   const reservations = await customer.getReservations();
 
   return res.render("customer_detail.html", { customer, reservations });
@@ -82,11 +72,6 @@ router.get("/:id/", async function (req, res, next) {
 
 router.get("/:id/edit/", async function (req, res, next) {
   const customer = await Customer.get(req.params.id);
-
-  if (customer === undefined) {
-
-    throw new NotFoundError();
-  }
 
   return res.render("customer_edit_form.html", { customer });
 });
@@ -98,11 +83,6 @@ router.post("/:id/edit/", async function (req, res, next) {
     throw new BadRequestError();
   }
   const customer = await Customer.get(req.params.id);
-
-  if (customer === undefined) {
-
-    throw new NotFoundError();
-  }
 
   customer.firstName = req.body.firstName;
   customer.lastName = req.body.lastName;

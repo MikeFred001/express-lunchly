@@ -22,19 +22,18 @@ class Reservation {
   getFormattedStartAt() {
     return moment(this.startAt).format("MMMM Do YYYY, h:mm a");
   }
-  // what is this??????
 
   /** given a customer id, find their reservations. */
 
   static async getReservationsForCustomer(customerId) {
     const results = await db.query(
       `SELECT id,
-                  customer_id AS "customerId",
-                  num_guests AS "numGuests",
-                  start_at AS "startAt",
-                  notes AS "notes"
-           FROM reservations
-           WHERE customer_id = $1`,
+        customer_id AS "customerId",
+        num_guests AS "numGuests",
+        start_at AS "startAt",
+        notes AS "notes"
+      FROM reservations
+      WHERE customer_id = $1`,
       [customerId],
     );
 
@@ -63,12 +62,12 @@ class Reservation {
             num_guests=$3,
             notes=$4
         WHERE id = $5`, [
-        this.customerId,
-        this.startAt,
-        this.numGuests,
-        this.notes,
-        this.id
-      ]
+          this.customerId,
+          this.startAt,
+          this.numGuests,
+          this.notes,
+          this.id
+        ]
       );
     }
   }

@@ -4,31 +4,46 @@
 
 const express = require("express");
 
-const { BadRequestError } = require("./expressError");
+const { BadRequestError, NotFoundError } = require("./expressError");
 const Customer = require("./models/customer");
 const Reservation = require("./models/reservation");
 
 const router = new express.Router();
 
 
-
-
-/** Homepage: show list of customers. */
-
-router.get("/top-ten", async function(req, res, next) {
-  const customers = await Customer.getTopTen();
-  return res.render("customer_top_ten.html", { customers });
-})
+/** Homepage: show list of customers.
+ *
+ *  render search results if search query is entered.
+ *
+  */
 
 router.get("/", async function (req, res, next) {
+
   if (req.query.search) {
     const customers = await Customer.search(req.query.search);
     return res.render("customer_list.html", { customers });
   }
 
   const customers = await Customer.all();
+
+  if (customers === undefined) {
+
+    throw new NotFoundError();
+  }
+
   return res.render("customer_list.html", { customers });
 });
+
+
+/** show list of top-ten customers. */
+
+router.get("/top-ten", async function (req, res, next) {
+  const customers = await Customer.getTopTen();
+  return res.render("customer_top_ten.html", { customers });
+});
+
+
+/** show add customer form   */
 
 router.get("/add/", async function (req, res, next) {
   return res.render("customer_new_form.html");
@@ -53,6 +68,11 @@ router.post("/add/", async function (req, res, next) {
 router.get("/:id/", async function (req, res, next) {
   const customer = await Customer.get(req.params.id);
 
+  if (customer === undefined) {
+
+    throw new NotFoundError();
+  }
+
   const reservations = await customer.getReservations();
 
   return res.render("customer_detail.html", { customer, reservations });
@@ -62,6 +82,11 @@ router.get("/:id/", async function (req, res, next) {
 
 router.get("/:id/edit/", async function (req, res, next) {
   const customer = await Customer.get(req.params.id);
+
+  if (customer === undefined) {
+
+    throw new NotFoundError();
+  }
 
   return res.render("customer_edit_form.html", { customer });
 });
@@ -73,6 +98,12 @@ router.post("/:id/edit/", async function (req, res, next) {
     throw new BadRequestError();
   }
   const customer = await Customer.get(req.params.id);
+
+  if (customer === undefined) {
+
+    throw new NotFoundError();
+  }
+
   customer.firstName = req.body.firstName;
   customer.lastName = req.body.lastName;
   customer.phone = req.body.phone;

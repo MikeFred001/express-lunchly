@@ -91,6 +91,9 @@ class Customer {
     }
   }
 
+
+  /** returns fullname of a customer */
+
   fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
@@ -111,10 +114,10 @@ class Customer {
       [`%${searchTerm}%`]
     );
 
-    console.log("RESULT ROWS>>>>>>>>>>>", result.rows);
-
     return result.rows.map(cust => new Customer(cust));
   }
+
+  /** get a list of top-ten customers based on reservation count */
 
   static async getTopTen() {
     const result = await db.query(`
@@ -129,8 +132,8 @@ class Customer {
         GROUP BY c.id
         ORDER BY rCount DESC
         LIMIT 10
-    `)
-    console.log(result.rows);
+    `);
+
     return result.rows.map(cust => new Customer(cust));
   }
 }

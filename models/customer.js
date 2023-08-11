@@ -97,30 +97,23 @@ class Customer {
 
   /** search for a customer in the list. */
 
-  static async searchAcustomer(searchTerm) {
+  static async search(searchTerm) {
 
     const results = await db.query(
       `SELECT id,
-                  first_name AS "firstName",
-                  last_name  AS "lastName",
-                  phone,
-                  notes
-           FROM customers
-           WHERE first_name ILIKE $1 or last_name ILIKE $1
-           ORDER BY last_name`,
-      [searchTerm]
+        first_name AS "firstName",
+        last_name  AS "lastName",
+        phone,
+        notes
+          FROM customers
+          WHERE first_name ILIKE $1 or last_name ILIKE $1
+          ORDER BY last_name`,
+      [`%${searchTerm}%`]
     );
 
     console.log(results.rows);
 
     return results.rows.map(customer => new Customer(customer));
-
-
-
-    // "%name%"
-
-
-
   }
 
 

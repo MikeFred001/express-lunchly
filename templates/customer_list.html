@@ -6,6 +6,10 @@
 
   <h1>Customers</h1>
 
+    {% if customers.length === 0 %}
+      <h2 style="color: rgb(195, 0, 0);">No Customers Found</h2>
+    {% endif %}
+
   <ul style="column-count: 4">
     {% for customer in customers %}
       <li>
@@ -13,6 +17,7 @@
           {{ customer.fullName() }}
         </a>
       </li>
+
     {% endfor %}
   </ul>
 

@@ -102,6 +102,8 @@ class Customer {
 
   static async search(searchTerm) {
 
+
+
     const result = await db.query(
       `SELECT id,
         first_name AS "firstName",
@@ -109,11 +111,13 @@ class Customer {
         phone,
         notes
           FROM customers
-          WHERE first_name ILIKE $1 or last_name ILIKE $1
+          WHERE first_name || '_' || last_name ILIKE $1
           ORDER BY last_name`,
       [`%${searchTerm}%`]
     );
 
+    // WHERE  first_name
+    // WHERE first_name ILIKE $1 or last_name ILIKE $1 or first_name+last_name ILIKE $1
     return result.rows.map(cust => new Customer(cust));
   }
 

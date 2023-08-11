@@ -99,7 +99,7 @@ class Customer {
 
   static async search(searchTerm) {
 
-    const results = await db.query(
+    const result = await db.query(
       `SELECT id,
         first_name AS "firstName",
         last_name  AS "lastName",
@@ -111,12 +111,28 @@ class Customer {
       [`%${searchTerm}%`]
     );
 
-    console.log(results.rows);
+    console.log("RESULT ROWS>>>>>>>>>>>", result.rows);
 
-    return results.rows.map(customer => new Customer(customer));
+    return result.rows.map(cust => new Customer(cust));
   }
 
-
+  static async getTopTen() {
+    const result = await db.query(`
+    SELECT c.id,
+      first_name AS "firstName",
+      last_name AS "lastName",
+      c.phone,
+      COUNT(*) as rCount
+        FROM customers AS c
+          JOIN reservations AS r
+            ON c.id = r.customer_id
+        GROUP BY c.id
+        ORDER BY rCount DESC
+        LIMIT 10
+    `)
+    console.log(result.rows);
+    return result.rows.map(cust => new Customer(cust));
+  }
 }
 
-module.exports = Customer;;
+module.exports = Customer;

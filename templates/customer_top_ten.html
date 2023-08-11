@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Top Ten Customers{% endblock %}
+{% block content %}
+
+  <a class="btn btn-primary" style="float: right" href="/add/">Add a Customer</a>
+
+  <h1>Top Ten Customers</h1>
+
+  <ol style="column-count: 4">
+    {% for customer in customers %}
+      <li>
+        <h5>
+          <a href="/{{ customer.id }}/">
+            {{ customer.fullName() }}
+          </a>
+        </h5>
+    </li>
+
+    {% endfor %}
+  </ol>
+
+{% endblock %}

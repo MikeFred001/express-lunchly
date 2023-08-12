@@ -104,10 +104,10 @@ class Customer {
 
     const result = await db.query(
       `SELECT id,
-        first_name AS "firstName",
-        last_name  AS "lastName",
-        phone,
-        notes
+              first_name AS "firstName",
+              last_name  AS "lastName",
+              phone,
+              notes
       FROM customers
       WHERE CONCAT(first_name, ' ', last_name) ILIKE '%' || $1 || '%'
       ORDER BY last_name`,
@@ -121,11 +121,11 @@ class Customer {
 
   static async getTopTen() {
     const result = await db.query(`
-    SELECT c.id,
-      first_name AS "firstName",
-      last_name AS "lastName",
-      c.phone,
-    COUNT(*) as rCount
+      SELECT c.id,
+             first_name AS "firstName",
+             last_name AS "lastName",
+             c.phone,
+             COUNT(*) as rCount
       FROM customers AS c
         LEFT OUTER JOIN reservations AS r
           ON c.id = r.customer_id

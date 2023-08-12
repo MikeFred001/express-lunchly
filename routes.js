@@ -80,6 +80,7 @@ router.get("/:id/edit/", async function (req, res, next) {
 /** Handle editing a customer. */
 
 router.post("/:id/edit/", async function (req, res, next) {
+  console.log("REQ BODY>>>>>>>", req.body);
   if (req.body === undefined) {
     throw new BadRequestError();
   }

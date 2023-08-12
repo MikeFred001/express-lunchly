@@ -11,6 +11,7 @@ const app = new express();
 
 // Parse body for urlencoded (traditional form) data
 app.use(express.urlencoded());
+app.use(express.json());
 
 nunjucks.configure("templates", {
   autoescape: true,

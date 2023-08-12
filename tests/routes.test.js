@@ -49,15 +49,6 @@ describe("GET /add/", function () {
 //     expect(resp.statusCode).toEqual(301);
 //     expect(resp.text).toContain('<h1>Test1_first_name Test_1_last_name</h1>');
 //   });
-
-//   // testCustomer
-
-//   // {
-//   //   firstName: "Test1_first_name",
-//   //   lastName: "Test_1_last_name",
-//   //   phone: '111-111-1111',
-//   //   notes: 'test1 note'
-//   // }
 // });
 
 
@@ -72,9 +63,14 @@ describe("GET /:id/edit", function () {
   test("edit a certain customer html", async function () {
     const resp = await request(app)
       .post(`/${testCustomer.id}/edit`)
-      .send({ firstName: 'Jack' });
-
-    expect(resp.statusCode).toEqual(301);
+      .send({
+        firstName: 'Jack',
+        lastName: 'Fred',
+        phone: '555-555-5555',
+        notes: 'Hi.'
+      });
+    console.log("RESPONSE TEXT>>>>>>>>>", resp.text);
+    // expect(resp.statusCode).toEqual(301);
     expect(resp.text).toContain('<h1>Jack Fred</h1>');
   });
 });

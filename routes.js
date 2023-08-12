@@ -50,6 +50,7 @@ router.post("/add/", async function (req, res, next) {
   if (req.body === undefined) {
     throw new BadRequestError();
   }
+  console.log('req.body =', req.body);
   const { firstName, lastName, phone, notes } = req.body;
   const customer = new Customer({ firstName, lastName, phone, notes });
   await customer.save();

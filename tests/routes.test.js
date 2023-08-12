@@ -36,6 +36,52 @@ describe("GET /top-ten", function () {
 
 });
 
+describe("GET /add/", function () {
+  test("Shows add customer form html", async function () {
+    const resp = await request(app).get(`/add`);
+    expect(resp.text).toContain('<h1>Add a Customer</h1>');
+  });
+});
+
+// describe("POST /add/", function () {
+//   test("Adds a new customer html", async function () {
+//     const resp = await request(app).post(`/add/`).send(testCustomer);
+//     expect(resp.statusCode).toEqual(301);
+//     expect(resp.text).toContain('<h1>Test1_first_name Test_1_last_name</h1>');
+//   });
+
+//   // testCustomer
+
+//   // {
+//   //   firstName: "Test1_first_name",
+//   //   lastName: "Test_1_last_name",
+//   //   phone: '111-111-1111',
+//   //   notes: 'test1 note'
+//   // }
+// });
+
+
+describe("GET /:id/", function () {
+  test("Shows a certain customer html", async function () {
+    const resp = await request(app).get(`/${testCustomer.id}`);
+    expect(resp.text).toContain('<h1>Mike Fred</h1>');
+  });
+});
+
+describe("GET /:id/edit", function () {
+  test("edit a certain customer html", async function () {
+    const resp = await request(app)
+      .post(`/${testCustomer.id}/edit`)
+      .send({ firstName: 'Jack' });
+
+    expect(resp.statusCode).toEqual(301);
+    expect(resp.text).toContain('<h1>Jack Fred</h1>');
+  });
+});
+
+
+
+
 
 
 
